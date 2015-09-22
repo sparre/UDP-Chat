@@ -23,6 +23,15 @@ And your friend runs:
 
 And then it is just a matter of typing...
 
+If you want to play with it on a single machine, open two terminals, and
+run the program in both, but with the port numbers reversed:
+
+    talk 8877 localhost 7788
+
+    talk 7788 localhost 8877
+
+Once both instances are running, you're ready to chat.
+
 
 Building
 --------
