@@ -1,4 +1,4 @@
-PROJECT=the_project
+PROJECT=udp_chat
 
 GENERATED_EXECUTABLES=bin/demo
 
