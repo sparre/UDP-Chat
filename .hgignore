@@ -30,5 +30,5 @@ obj/*.ali
 obj/*.o
 
 # Generated executables:
-bin/demo
+bin/talk
 
