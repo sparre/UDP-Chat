@@ -9,8 +9,7 @@ package body POSIX.Direct_Character_IO is
    function End_Of_File (Item : in     Character_Or_EOF) return Boolean is
       pragma Inline (End_Of_File);
    begin
-      return Item < Character_Or_EOF (Character'Pos (Character'First)) or
-             Item > Character_Or_EOF (Character'Pos (Character'Last));
+      return not Is_Character (Item);
    end End_Of_File;
 
    function Get return Character_Or_EOF is
@@ -22,8 +21,8 @@ package body POSIX.Direct_Character_IO is
    function Is_Character (Item : in     Character_Or_EOF) return Boolean is
       pragma Inline (Is_Character);
    begin
-      return Item >= Character_Or_EOF (Character'Pos (Character'First)) or
-             Item <= Character_Or_EOF (Character'Pos (Character'Last));
+      return Item in Character_Or_EOF (Character'Pos (Character'First)) ..
+                     Character_Or_EOF (Character'Pos (Character'Last));
    end Is_Character;
 
    procedure Put (Item : in     POSIX.POSIX_Character) is
