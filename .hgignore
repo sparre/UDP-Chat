@@ -15,6 +15,7 @@ tests/*/*.output
 # Generated test executables:
 
 # Test output to clean up:
+peers.log
 
 # Output from source text metric analysis:
 obj/*.ad[sb].metrix

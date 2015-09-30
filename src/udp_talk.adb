@@ -24,6 +24,54 @@ procedure UDP_Talk is
    Socket   : Socket_Type;
    To, From : Sock_Addr_Type;
 
+   task Logger is
+      entry New_Peer (Address : in Sock_Addr_Type);
+   end Logger;
+
+   task body Logger is
+      File : File_Type;
+      Peer : Sock_Addr_Type;
+   begin
+      begin
+         Open (File => File,
+               Name => "peers.log",
+               Mode => Append_File);
+      exception
+         when
+           others =>
+            Create (File => File,
+                    Name => "peers.log",
+                    Mode => Append_File);
+      end;
+
+      accept New_Peer (Address : in Sock_Addr_Type) do
+         Peer := Address;
+      end New_Peer;
+
+      Put_Line (File => File,
+                Item => Image (Peer));
+      Flush (File);
+
+      loop
+         declare
+            Save : Boolean := False;
+         begin
+            accept New_Peer (Address : in Sock_Addr_Type) do
+               if Address /= Peer then
+                  Peer := Address;
+                  Save := True;
+               end if;
+            end New_Peer;
+
+            if Save then
+               Put_Line (File => File,
+                         Item => Image (Peer));
+               Flush (File);
+            end if;
+         end;
+      end loop;
+   end Logger;
+
    procedure End_Of_Talk (Error : in Boolean := False);
    procedure Set_Character_By_Character_And_No_Echo_Mode;
 
@@ -203,6 +251,8 @@ procedure UDP_Talk is
                          Last   => Filled,
                          From   => To);
          Put (Message => Buffer (Buffer'First .. Filled));
+
+         Logger.New_Peer (Address => To);
       end loop;
       pragma Warnings (Off);
       POSIX.Process_Primitives.Exit_Process (Status => 1);
