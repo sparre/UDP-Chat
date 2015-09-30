@@ -18,7 +18,7 @@ use
   Ada.Text_IO,
   GNAT.Sockets;
 
-procedure Talk is
+procedure UDP_Talk is
    Line_Length : constant := 80;
 
    Socket   : Socket_Type;
@@ -249,4 +249,4 @@ exception
                         "): An exception was raised: " &
                         Ada.Exceptions.Exception_Message (Oops));
       End_Of_Talk (Error => True);
-end Talk;
+end UDP_Talk;
