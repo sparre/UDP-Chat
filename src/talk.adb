@@ -1,4 +1,5 @@
 with
+  Ada.Characters.Handling,
   Ada.Characters.Latin_1,
   Ada.Command_Line,
   Ada.Exceptions,
@@ -30,7 +31,10 @@ procedure Talk is
    function Target_Address return Sock_Addr_Type;
 
    procedure Put (Message : in     Stream_Element_Array);
-   procedure Send (Message : in     Character);
+   procedure Send_And_Show (Message : in     Character);
+   procedure Send (Datagram : in     String);
+
+   procedure Put_Backspace;
 
    procedure End_Of_Talk (Error : in Boolean := False) is
       use POSIX.Process_Primitives;
@@ -46,14 +50,19 @@ procedure Talk is
    procedure Put (Message : in     Stream_Element_Array) is
       Inverse   : constant String := Ada.Characters.Latin_1.ESC & "[7m";
       Plain     : constant String := Ada.Characters.Latin_1.ESC & "[m";
-      Move_Left : constant String := Ada.Characters.Latin_1.ESC & "[D";
    begin
       if Message'Length = 0 then
          null;
       elsif Message'Length = 1 and then
             Character'Val (Message (Message'First)) = 'D'
       then
-         Put (Move_Left & " " & Move_Left);
+         Put_Backspace;
+      elsif Message'Length = 3 and then
+            Character'Val (Message (Message'First)) = 'E'
+      then
+         Put (Ada.Characters.Latin_1.ESC);
+         Put (Character'Val (Message (Message'First + 1)));
+         Put (Character'Val (Message (Message'First + 2)));
       elsif Message'Length = 2 and then
             Character'Val (Message (Message'First)) = 'K'
       then
@@ -67,22 +76,60 @@ procedure Talk is
       end if;
    end Put;
 
-   procedure Send (Message : in     Character) is
-      Buffer : Stream_Element_Array (1 .. 2);
+   procedure Put_Backspace is
+      Move_Left : constant String := Ada.Characters.Latin_1.ESC & "[D";
+   begin
+      Put (Move_Left & " " & Move_Left);
+   end Put_Backspace;
+
+   procedure Send (Datagram : in     String) is
+      Buffer : Stream_Element_Array
+                 (Stream_Element_Offset (Datagram'First) ..
+                  Stream_Element_Offset (Datagram'Last));
       Last   : Stream_Element_Offset;
    begin
-      Buffer := (1 => Character'Pos ('K'),
-                 2 => Character'Pos (Message));
+      for I in Datagram'Range loop
+         Buffer (Stream_Element_Offset (I)) :=
+           Character'Pos (Datagram (I));
+      end loop;
+
       Send_Socket (Socket => Socket,
                    Item   => Buffer,
                    Last   => Last,
                    To     => To);
       if Last /= Buffer'Last then
-         Put_Line ("Failed to send all of '" & Message & "'.");
-      else
-         Put (Message);
+         Put_Line ("Failed to send all of the datagram '" & Datagram & "'.");
       end if;
    end Send;
+
+   procedure Send_And_Show (Message : in     Character) is
+      use Ada.Characters.Handling;
+   begin
+      if Is_Graphic (Message) or
+         Message = Ada.Characters.Latin_1.LF
+      then
+         Send (Datagram => 'K' & Message);
+         Put (Message);
+      elsif Message = Ada.Characters.Latin_1.ESC then
+         declare
+            use POSIX.Direct_Character_IO;
+            Datagram : String (1 .. 3) := "E..";
+         begin
+            Datagram (2) := To_Character (Get);
+            Datagram (3) := To_Character (Get);
+
+            Send (Datagram => Datagram);
+            Put (Message & Datagram (2 .. 3));
+         end;
+      elsif Message = Ada.Characters.Latin_1.DEL then
+         Send (Datagram => "D");
+         Put (Message);
+         Put_Backspace;
+      else
+         Put ("[don't know how to send character" &
+              Natural'Image (Character'Pos (Message)) & "]");
+      end if;
+   end Send_And_Show;
 
    procedure Set_Character_By_Character_And_No_Echo_Mode is
       use POSIX.Terminal_Functions;
@@ -191,7 +238,7 @@ begin
          if End_Of_File (Input) then
             End_Of_Talk;
          else
-            Send (Message => To_Character (Input));
+            Send_And_Show (Message => To_Character (Input));
          end if;
       end;
    end loop;
