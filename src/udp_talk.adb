@@ -169,7 +169,9 @@ procedure UDP_Talk is
             Send (Datagram => Datagram);
             Put (Message & Datagram (2 .. 3));
          end;
-      elsif Message = Ada.Characters.Latin_1.DEL then
+      elsif Message = Ada.Characters.Latin_1.DEL or
+            Message = Ada.Characters.Latin_1.SO
+      then
          Send (Datagram => "D");
          Put (Message);
          Put_Backspace;

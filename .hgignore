@@ -31,5 +31,6 @@ obj/*.ali
 obj/*.o
 
 # Generated executables:
+bin/key_code_logger
 bin/udp_talk
 

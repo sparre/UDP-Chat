@@ -7,7 +7,8 @@ with "florist";
 project UDP_Chat is
    for Source_Dirs use ("src/");
 
-   for Main use ("udp_talk");
+   for Main use ("key_code_logger",
+                 "udp_talk");
 
    package Builder  renames Ada_2012.Builder;
    package Compiler renames Ada_2012.Compiler;
