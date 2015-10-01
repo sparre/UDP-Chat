@@ -11,7 +11,7 @@ with
   POSIX.Process_Primitives,
   POSIX.Terminal_Functions,
   TTY_Memory,
-  Mercurial;
+  UDP_Chat.Mercurial;
 
 use
   Ada.Streams,
@@ -262,7 +262,8 @@ procedure UDP_Talk is
    exception
       when Oops : others =>
          Put_Line (File => Standard_Error,
-                   Item => "Receiver (revision " & Mercurial.Revision &
+                   Item => "Receiver (revision " &
+                           UDP_Chat.Mercurial.Revision &
                            "): An exception was raised: " &
                            Ada.Exceptions.Exception_Message (Oops));
          End_Of_Talk (Error => True);
@@ -297,7 +298,8 @@ begin
 exception
    when Oops : others =>
       Put_Line (File => Standard_Error,
-                Item => "Transmitter (revision " & Mercurial.Revision &
+                Item => "Transmitter (revision " &
+                        UDP_Chat.Mercurial.Revision &
                         "): An exception was raised: " &
                         Ada.Exceptions.Exception_Message (Oops));
       End_Of_Talk (Error => True);

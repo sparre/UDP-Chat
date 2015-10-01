@@ -1,9 +1,10 @@
-PROJECT=udp_chat
+PROJECT=UDP_Chat
 
 GENERATED_EXECUTABLES=bin/key_code_logger \
                       bin/udp_talk
 
-GENERATED_SOURCES=
+GENERATED_SOURCES=$(PROJECT_ROOT_SOURCE) \
+                  $(HG_STATE_SOURCE)
 
 SCRIPTS=
 
