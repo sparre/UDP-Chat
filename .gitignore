@@ -1,0 +1,37 @@
+syntax: glob
+
+# Temporary files from editors:
+*~
+.\#*
+\#*\#
+.*.swp
+
+# Output from tests:
+tests/build.status
+tests/run.status
+tests/*/*.errors
+tests/*/*.output
+
+# Generated test executables:
+
+# Test output to clean up:
+peers.log
+
+# Output from source text metric analysis:
+obj/*.ad[sb].metrix
+
+# Output from ASIS based tools:
+*.adt
+
+# Generated source files:
+src/udp_chat.ads
+src/udp_chat-mercurial.ads
+
+# Generated object files:
+obj/*.ali
+obj/*.o
+
+# Generated executables:
+bin/key_code_logger
+bin/udp_talk
+
