@@ -4,6 +4,7 @@ include Makefile.project
 LC_PROJECT = $(shell echo -n "${PROJECT}" | tr '[:upper:].' '[:lower:]-')
 
 PROJECT_ROOT_SOURCE = src/$(LC_PROJECT).ads
+GENERATED_SOURCES  += $(PROJECT_ROOT_SOURCE)
 
 HG_STATE_SOURCE     = src/$(LC_PROJECT)-mercurial.ads
 HG_MODIFIER         = `test $$(hg status | wc -c) -gt 0 && echo "plus changes" || echo "as committed"`
