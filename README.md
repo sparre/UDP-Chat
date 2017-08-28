@@ -40,9 +40,9 @@ You are welcome to see if I'm awake:
 Build dependencies
 ------------------
 
-+ Zsh
++ Bash
 * GNU Parallel
-* GNAT (including the `gnatmetric` tool)
+* GNAT
 * Mercurial (hg)
 * FLORIST (or another POSIX Ada API implementation)
 
