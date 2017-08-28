@@ -18,9 +18,6 @@ tests/*/*.output
 # Test output to clean up:
 peers.log
 
-# Output from source text metric analysis:
-obj/*.ad[sb].metrix
-
 # Output from ASIS based tools:
 *.adt
 

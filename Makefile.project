@@ -3,7 +3,8 @@ PROJECT=UDP_Chat
 GENERATED_EXECUTABLES=bin/key_code_logger \
                       bin/udp_talk
 
-GENERATED_SOURCES=
+GENERATED_SOURCES=src/$(LC_PROJECT).ads \
+                  src/$(LC_PROJECT)-mercurial.ads
 
 SCRIPTS=
 

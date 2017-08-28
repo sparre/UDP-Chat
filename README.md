@@ -10,43 +10,31 @@ character-by-character chat over UDP.
 Usage
 -----
 
-```
     udp_talk <local port> <remote host> <remote port>
-```
 
 If you want to chat with a user on "remote.host.example" and you (over
 another channel) have agreed to use port 8877, you run:
 
-```
     udp_talk 8877 remote.host.example 8877
-```
 
 And your friend runs:
 
-```
     udp_talk 8877 your.host.example 8877
-```
 
 And then it is just a matter of typing...
 
 If you want to play with it on a single machine, open two terminals, and
 run the program in both, but with the port numbers reversed:
 
-```
     udp_talk 8877 localhost 7788
-```
 
-```
     udp_talk 7788 localhost 8877
-```
 
 Once both instances are running, you're ready to chat.
 
 You are welcome to see if I'm awake:
 
-```
     udp_talk 10123 www.jacob-sparre.dk 10123
-```
 
 
 Build dependencies
